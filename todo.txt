@@ -1,0 +1,3 @@
+
+form-validation (cant be empty)
+make cards look nice for each book
