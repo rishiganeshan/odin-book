@@ -18,7 +18,16 @@ function Book(title, author, pages, haveRead) {
     this.pages = pages;
     this.haveRead = haveRead;
 
+
 }
+
+Book.prototype.toggleReadStatus = function () {
+    if (this.haveRead === "yes") {
+        this.haveRead = "no"
+    } else {
+        this.haveRead = "yes"
+    }
+};
 
 function addBookToLibrary(title, author, pages, haveRead) {
     let book = new Book(title, author, pages, haveRead);
@@ -32,10 +41,17 @@ function removeBookFromLibrary(id) {
 
 }
 
+function toggleReadStatusFromBookId(id) {
+    let book = myLibrary.find(book => book.id === id)
+    // console.log(book)
+    book.toggleReadStatus()
+    
+}
+
 function removeBookFromPage(id) {
     const divToRemove = document.querySelector(
         'div[data-book-id=\"' + id +'\"]')
-    console.log(divToRemove)
+    // console.log(divToRemove)
     library.removeChild(divToRemove)
 }
 
@@ -44,50 +60,51 @@ function removeBookFromPage(id) {
 
 function showBookAtIndex(idx) {
     let book = myLibrary.at(idx)
-    console.log(book)
+    // console.log(book)
     const div = document.createElement("div");
     div.setAttribute("data-book-id", book.id)
 
+    const title = document.createElement("div");
+    title.textContent = "Title: " + book["title"]
+    const author = document.createElement("div");
+    author.textContent = "Author: " + book["author"]
+    const pages = document.createElement("div");
+    pages.textContent = "Number of Pages: " + book["pages"]
+    const read = document.createElement("div");
+    read.textContent = "Has Been Read: " + book["haveRead"]
+    
 
-    for (let prop in book) {
-        if (prop === "id") {
-            continue;
-
-        }
-        const property = document.createElement("div");
-        property.textContent = prop;
-        div.appendChild(property)
-
-        const propval = document.createElement("div");
-        console.log(book[prop])
-        propval.textContent = book[prop];
-        div.appendChild(propval);
-
-
-        div.appendChild(document.createElement("br"))
-
-
-
-    }
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove Book"
-    // removeButton.setAttribute("data-book-id", book.id)
 
     removeButton.addEventListener("click", (e) => {
-        // let idOfBookToRemove = book.id;
-        // console.log(myLibrary)
-        // let newLibrary = myLibrary.filter(b => b.id !== idOfBookToRemove)
-        // let myLibrary = newLibrary
+
         removeBookFromLibrary(e.target.parentNode.dataset.bookId)
         removeBookFromPage(e.target.parentNode.dataset.bookId)
 
-        // redrawBooks();
-        // favDialog.showModal();
+
     });
+
+    const toggleButton = document.createElement("button");
+    toggleButton.textContent = "Toggle Read Status"
+
+    toggleButton.addEventListener("click", (e) => {
+
+        toggleReadStatusFromBookId(e.target.parentNode.dataset.bookId)
+        showUpdatedLibrary()
+
+    });
+
+    div.appendChild(title)
+    div.appendChild(author)
+    div.appendChild(pages)
+    div.appendChild(read)
+
 
 
     div.appendChild(removeButton)
+    div.appendChild(toggleButton)
     div.appendChild(document.createElement("br"))
     div.appendChild(document.createElement("br"))
 
