@@ -1,4 +1,4 @@
-let myLibrary = [];
+
 
 const showButton = document.getElementById("showDialog");
 const favDialog = document.getElementById("favDialog");
@@ -28,35 +28,64 @@ class Book {
 
 }
 
+class Library {
+    constructor() {
+        this.bookList = []
+    }
+    
+    addBookToLibrary(title, author, pages, haveRead) {
+        let book = new Book(title, author, pages, haveRead);
+        this.bookList.push(book);
+    }
+
+    removeBookFromLibrary(id) {
+
+        this.bookList = this.bookList.filter(b => b.id !== id)
+   
+    }
+
+    getList() {
+        return this.bookList
+    }
+
+    getLength() {
+        return this.bookList.length
+    }
+
+    getBookAtIdx(i) {
+        return this.bookList.at(i)
+    }
+
+    addBook(title, author, pages, haveRead) {
+        let book = new Book(title, author, pages, haveRead);
+        this.bookList.push(book)
+    }
+    toggleReadStatusFromBookId(id) {
+        let book = this.bookList.find(book => book.id === id)
+        // console.log(book)
+        book.toggleReadStatus()
+
+    }
+}
+
 // let book = new Book(title, author, pages, haveRead);
 // console.log(book)
 
+myLibrary = new Library()
 
 
-function addBookToLibrary(title, author, pages, haveRead) {
-    let book = new Book(title, author, pages, haveRead);
-    myLibrary.push(book);
-}
-
-addBookToLibrary("The Hobbit", "JRR Toll", 1234, 'yes')
-
-addBookToLibrary("Harry Potter", "JK Rowling", 2834, 'yes')
-
-addBookToLibrary("Moneyball", "Michael Lewis", 1234, 'yes')
-
-function removeBookFromLibrary(id) {
-
-    myLibrary = myLibrary.filter(b => b.id !== id)
 
 
-}
 
-function toggleReadStatusFromBookId(id) {
-    let book = myLibrary.find(book => book.id === id)
-    // console.log(book)
-    book.toggleReadStatus()
-    
-}
+myLibrary.addBook("The Hobbit", "JRR Toll", 1234, 'yes')
+
+myLibrary.addBook("Harry Potter", "JK Rowling", 2834, 'yes')
+
+myLibrary.addBook("Moneyball", "Michael Lewis", 1234, 'yes')
+
+
+
+
 
 function removeBookFromPage(id) {
     const divToRemove = document.querySelector(
@@ -69,7 +98,7 @@ function removeBookFromPage(id) {
 
 
 function showBookAtIndex(idx) {
-    let book = myLibrary.at(idx)
+    let book = myLibrary.getBookAtIdx(idx)
     // console.log(book)
     const div = document.createElement("div");
     div.setAttribute("data-book-id", book.id)
@@ -90,7 +119,7 @@ function showBookAtIndex(idx) {
 
     removeButton.addEventListener("click", (e) => {
 
-        removeBookFromLibrary(e.target.parentNode.dataset.bookId)
+        myLibrary.removeBookFromLibrary(e.target.parentNode.dataset.bookId)
         removeBookFromPage(e.target.parentNode.dataset.bookId)
 
 
@@ -130,7 +159,7 @@ function showLatestBook() {
 
 function showUpdatedLibrary() {
     library.innerHTML = ""
-    for (let i = 0; i < myLibrary.length; i++) {
+    for (let i = 0; i < myLibrary.getLength(); i++) {
         showBookAtIndex(i)
     }
 
@@ -155,7 +184,7 @@ form.addEventListener("submit", (e) => {
         console.log(pair[0] + ": " + pair[1]);
     }
 
-    addBookToLibrary(formData.get("title"), 
+    myLibrary.addBookToLibrary(formData.get("title"), 
         formData.get("author"),
         formData.get("pages"),
         formData.get("read")
