@@ -1,9 +1,5 @@
 let myLibrary = [];
-addBookToLibrary("The Hobbit", "JRR Toll", 1234, 'yes')
 
-addBookToLibrary("Harry Potter", "JK Rowling", 2834, 'yes')
-
-addBookToLibrary("Moneyball", "Michael Lewis", 1234, 'yes')
 const showButton = document.getElementById("showDialog");
 const favDialog = document.getElementById("favDialog");
 const confirmBtn = favDialog.querySelector("button");
@@ -11,28 +7,42 @@ const form = document.querySelector("form");
 const body = document.querySelector("body")
 const library = document.querySelector(".library-container")
 
-function Book(title, author, pages, haveRead) {
-    this.id = crypto.randomUUID()
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.haveRead = haveRead;
 
+class Book {
+    constructor(title, author, pages, haveRead) {
+        console.log("yo")
+        this.id = crypto.randomUUID()
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.haveRead = haveRead;
+    }
+
+    toggleReadStatus() {
+        if (this.haveRead === "yes") {
+            this.haveRead = "no"
+        } else {
+            this.haveRead = "yes"
+        }
+    }
 
 }
 
-Book.prototype.toggleReadStatus = function () {
-    if (this.haveRead === "yes") {
-        this.haveRead = "no"
-    } else {
-        this.haveRead = "yes"
-    }
-};
+// let book = new Book(title, author, pages, haveRead);
+// console.log(book)
+
+
 
 function addBookToLibrary(title, author, pages, haveRead) {
     let book = new Book(title, author, pages, haveRead);
     myLibrary.push(book);
 }
+
+addBookToLibrary("The Hobbit", "JRR Toll", 1234, 'yes')
+
+addBookToLibrary("Harry Potter", "JK Rowling", 2834, 'yes')
+
+addBookToLibrary("Moneyball", "Michael Lewis", 1234, 'yes')
 
 function removeBookFromLibrary(id) {
 
